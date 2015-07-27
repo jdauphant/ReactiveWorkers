@@ -11,7 +11,8 @@ import ReactiveCocoa
 import CoreLocation
 
 class GeocoderManager {
-    static func geocode(address: String) -> SignalProducer<CLLocation, NSError> {
+    
+    func geocode(address: String) -> SignalProducer<CLLocation, NSError> {
         return SignalProducer {
             sink, disposable in
             println("Geocode for address : \(address)")

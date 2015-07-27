@@ -10,8 +10,9 @@ import UIKit
 import ReactiveCocoa
 
 class ViewController: UIViewController {
-    @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var textView: UITextView!
+    @IBOutlet private weak var textField: UITextField!
+    @IBOutlet private weak var textView: UITextView!
+    private let geocodingManager = GeocoderManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +21,7 @@ class ViewController: UIViewController {
         
         let addressResult = addressStrings
             |> flatMap(.Latest) { address in
-                return GeocoderManager.geocode(address)
+                return self.geocodingManager.geocode(address)
             }
             |> observeOn(UIScheduler())
         
