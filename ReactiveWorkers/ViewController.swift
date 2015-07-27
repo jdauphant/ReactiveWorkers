@@ -12,11 +12,10 @@ import ReactiveCocoa
 class ViewController: UIViewController {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var searchButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let addressStrings = searchButton.rac_signalForControlEvents(.TouchUpInside).toSignalProducer()
+        let addressStrings = textField.rac_signalForControlEvents(UIControlEvents.EditingDidEndOnExit).toSignalProducer()
             |> map { sender in self.textField.text }
         
         let addressResult = addressStrings
