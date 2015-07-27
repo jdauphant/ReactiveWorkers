@@ -10,23 +10,36 @@ import Foundation
 import ReactiveCocoa
 import CoreLocation
 
-class GeocoderManager {
+public class GeocoderManager: TaskPool {
     
-    func geocode(address: String) -> SignalProducer<CLLocation, NSError> {
-        return SignalProducer {
-            sink, disposable in
-            println("Geocode for address : \(address)")
-            CLGeocoder().geocodeAddressString(address) {
-                placemarks, err in
-                println("Geocode result for \(address) : \(placemarks), \(err)")
-                if let error = err {
-                    sendError(sink, error)
-                } else if let location = (placemarks as? [CLPlacemark])?.first?.location {
-                    sendNext(sink, location)
-                } else {
-                    sendError(sink, NSError(domain: kCLErrorDomain, code: CLError.LocationUnknown.rawValue, userInfo: nil))
+    struct GeocoderTaskResult: TaskResult {
+        let location: CLLocation
+    }
+    
+    struct GeocoderTask: Task {
+        let address: String
+        
+        func start() -> SignalProducer<TaskResult, NSError> {
+            return SignalProducer {
+                sink, disposable in
+                println("Geocode for address : \(self.address)")
+                CLGeocoder().geocodeAddressString(self.address) {
+                    placemarks, err in
+                    println("Geocode result for \(self.address) : \(placemarks), \(err)")
+                    if let error = err {
+                        sendError(sink, error)
+                    } else if let location = (placemarks as? [CLPlacemark])?.first?.location {
+                        sendNext(sink, GeocoderTaskResult(location: location))
+                    } else {
+                        sendError(sink, NSError(domain: kCLErrorDomain, code: CLError.LocationUnknown.rawValue, userInfo: nil))
+                    }
                 }
             }
         }
+    }
+   
+    public func geocode(address: String) -> SignalProducer<CLLocation, NSError> {
+        return add(GeocoderTask(address: address))
+            |> map { result in (result as! GeocoderTaskResult).location }
     }
 }
