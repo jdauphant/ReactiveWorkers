@@ -24,9 +24,8 @@ class ViewController: UIViewController {
                 return self.geocodingManager.geocode(address)
             }
             |> observeOn(UIScheduler())
-        
-        addressResult.start(next: { result in
-            self.textView.text = "\(result)\n\(self.textView.text)"
+            |> start(next: { result in
+                self.textView.text = "\(result)\n\(self.textView.text)"
             })
         
     }
@@ -52,9 +51,10 @@ class ViewController: UIViewController {
                 sendNext(sink, count++)
             }
         }
+        let scheduler = PoolScheduler(maxConcurrentActions: 3)
         
         signal
-          |> observeOn(PoolScheduler(maxConcurrentActions: 3))
+          |> startOn(scheduler)
           |> start(next: { id in
                 self.addText("start #\(id)")
                 NSThread.sleepForTimeInterval(3.0)
