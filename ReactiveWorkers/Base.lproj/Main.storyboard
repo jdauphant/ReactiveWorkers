@@ -23,19 +23,31 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zpe-pX-cIQ">
-                                <rect key="frame" x="16" y="58" width="568" height="522"/>
+                                <rect key="frame" x="16" y="58" width="568" height="484"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yY1-TX-pFW">
+                                <rect key="frame" x="16" y="550" width="568" height="30"/>
+                                <state key="normal" title="Tests">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="runTests" destination="BYZ-38-t0r" eventType="touchUpInside" id="sMM-38-1DP"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="yY1-TX-pFW" firstAttribute="trailing" secondItem="Zpe-pX-cIQ" secondAttribute="trailing" id="1Jp-1f-JEk"/>
                             <constraint firstItem="Zpe-pX-cIQ" firstAttribute="leading" secondItem="5Tl-dP-pY5" secondAttribute="leading" id="GTV-rW-hMl"/>
                             <constraint firstItem="5Tl-dP-pY5" firstAttribute="trailing" secondItem="Zpe-pX-cIQ" secondAttribute="trailing" id="Iqa-eP-99s"/>
-                            <constraint firstAttribute="bottom" secondItem="Zpe-pX-cIQ" secondAttribute="bottom" constant="20" symbolic="YES" id="P3e-d6-JUX"/>
+                            <constraint firstItem="yY1-TX-pFW" firstAttribute="leading" secondItem="Zpe-pX-cIQ" secondAttribute="leading" id="Oyc-An-599"/>
+                            <constraint firstAttribute="bottom" secondItem="yY1-TX-pFW" secondAttribute="bottom" constant="20" symbolic="YES" id="UnH-fL-mFD"/>
+                            <constraint firstItem="Zpe-pX-cIQ" firstAttribute="top" secondItem="5Tl-dP-pY5" secondAttribute="bottom" constant="8" symbolic="YES" id="f6E-nP-Aup"/>
                             <constraint firstItem="Zpe-pX-cIQ" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="gz2-D8-fKy"/>
-                            <constraint firstItem="Zpe-pX-cIQ" firstAttribute="top" secondItem="5Tl-dP-pY5" secondAttribute="bottom" constant="8" symbolic="YES" id="iIs-gl-pgc"/>
+                            <constraint firstItem="yY1-TX-pFW" firstAttribute="top" secondItem="Zpe-pX-cIQ" secondAttribute="bottom" constant="8" symbolic="YES" id="lp1-tb-Gs7"/>
                             <constraint firstItem="5Tl-dP-pY5" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="mcT-wS-A5u"/>
                             <constraint firstItem="5Tl-dP-pY5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="z8p-o1-Bbl"/>
                         </constraints>

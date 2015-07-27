@@ -29,6 +29,37 @@ class ViewController: UIViewController {
             self.textView.text = "\(result)\n\(self.textView.text)"
             })
         
+    }
+    
+    @IBAction func runTests() {
+        self.textView.text = ""
+        testPoolScheduler()
+    }
+    
+    func addText(text: String) {
+        println("\(NSDate())\(text)")
+        dispatch_async(dispatch_get_main_queue()) {
+            self.textView.text = "\(self.textView.text)\(NSDate())\(text)\n"
+        }
+    }
+
+    
+    func testPoolScheduler() {
+        let signal: SignalProducer<Int, NoError> = SignalProducer {
+            sink, disposable in
+            var count = 0
+            NSTimer.schedule(repeatInterval: 0.5) { timer in
+                sendNext(sink, count++)
+            }
+        }
+        
+        signal
+          |> observeOn(PoolScheduler(maxConcurrentActions: 3))
+          |> start(next: { id in
+                self.addText("start #\(id)")
+                NSThread.sleepForTimeInterval(3.0)
+                self.addText("stop #\(id)")
+          })
         
     }
 }
