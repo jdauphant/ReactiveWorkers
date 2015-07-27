@@ -14,6 +14,8 @@
 		F9456CED1B662F270037C0C2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9456CEC1B662F270037C0C2 /* Images.xcassets */; };
 		F9456CF01B662F270037C0C2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9456CEE1B662F270037C0C2 /* LaunchScreen.xib */; };
 		F9456CFC1B662F270037C0C2 /* ReactiveWorkersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9456CFB1B662F270037C0C2 /* ReactiveWorkersTests.swift */; };
+		F9456D061B6630330037C0C2 /* GeocoderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9456D051B6630330037C0C2 /* GeocoderManager.swift */; };
+		F9456D0A1B6631E20037C0C2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9456D091B6631E20037C0C2 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,9 @@
 		F9456CF51B662F270037C0C2 /* ReactiveWorkersTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactiveWorkersTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9456CFA1B662F270037C0C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F9456CFB1B662F270037C0C2 /* ReactiveWorkersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactiveWorkersTests.swift; sourceTree = "<group>"; };
+		F9456D051B6630330037C0C2 /* GeocoderManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeocoderManager.swift; sourceTree = "<group>"; };
+		F9456D071B66316E0037C0C2 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		F9456D091B6631E20037C0C2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9456D0A1B6631E20037C0C2 /* CoreLocation.framework in Frameworks */,
 				DDE12A4BFA3E9506394F1332 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -64,6 +70,8 @@
 		065D9D499A6DA0868A6B61E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9456D091B6631E20037C0C2 /* CoreLocation.framework */,
+				F9456D071B66316E0037C0C2 /* GLKit.framework */,
 				3D58A61B9AAE6FBD83E8EE29 /* Pods.framework */,
 			);
 			name = Frameworks;
@@ -107,6 +115,7 @@
 				F9456CEC1B662F270037C0C2 /* Images.xcassets */,
 				F9456CEE1B662F270037C0C2 /* LaunchScreen.xib */,
 				F9456CE31B662F270037C0C2 /* Supporting Files */,
+				F9456D051B6630330037C0C2 /* GeocoderManager.swift */,
 			);
 			path = ReactiveWorkers;
 			sourceTree = "<group>";
@@ -289,6 +298,7 @@
 			files = (
 				F9456CE81B662F270037C0C2 /* ViewController.swift in Sources */,
 				F9456CE61B662F270037C0C2 /* AppDelegate.swift in Sources */,
+				F9456D061B6630330037C0C2 /* GeocoderManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
