@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		DDE12A4BFA3E9506394F1332 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D58A61B9AAE6FBD83E8EE29 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F91F6CD91B666D9D00912BE0 /* NSTimer+Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F6CD81B666D9D00912BE0 /* NSTimer+Closure.swift */; };
+		F933329E1B66C7CA0025A94F /* SleepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F933329D1B66C7CA0025A94F /* SleepManager.swift */; };
 		F9456CE61B662F270037C0C2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9456CE51B662F270037C0C2 /* AppDelegate.swift */; };
 		F9456CE81B662F270037C0C2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9456CE71B662F270037C0C2 /* ViewController.swift */; };
 		F9456CEB1B662F270037C0C2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9456CE91B662F270037C0C2 /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 		41E11EE8C32519712A3535DD /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		CF8E7C02BEC242021D799625 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F91F6CD81B666D9D00912BE0 /* NSTimer+Closure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTimer+Closure.swift"; sourceTree = "<group>"; };
+		F933329D1B66C7CA0025A94F /* SleepManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SleepManager.swift; sourceTree = "<group>"; };
 		F9456CE01B662F270037C0C2 /* ReactiveWorkers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReactiveWorkers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9456CE41B662F270037C0C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F9456CE51B662F270037C0C2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				F9456D051B6630330037C0C2 /* GeocoderManager.swift */,
 				F96EC7A71B6661CA0035AFF5 /* PoolScheduler.swift */,
 				F91F6CD81B666D9D00912BE0 /* NSTimer+Closure.swift */,
+				F933329D1B66C7CA0025A94F /* SleepManager.swift */,
 			);
 			path = ReactiveWorkers;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9456CE81B662F270037C0C2 /* ViewController.swift in Sources */,
+				F933329E1B66C7CA0025A94F /* SleepManager.swift in Sources */,
 				F9456CE61B662F270037C0C2 /* AppDelegate.swift in Sources */,
 				F91F6CD91B666D9D00912BE0 /* NSTimer+Closure.swift in Sources */,
 				F9456D061B6630330037C0C2 /* GeocoderManager.swift in Sources */,

@@ -32,7 +32,7 @@ class ViewController: UIViewController {
     
     @IBAction func runTests() {
         self.textView.text = ""
-        testPoolScheduler()
+        testSleepManager()
     }
     
     func addText(text: String) {
@@ -41,26 +41,25 @@ class ViewController: UIViewController {
             self.textView.text = "\(self.textView.text)\(NSDate())\(text)\n"
         }
     }
-
     
-    func testPoolScheduler() {
-        let signal: SignalProducer<Int, NoError> = SignalProducer {
+    func testSleepManager() {
+        let sleepManager = SleepManager()
+        
+        let signal: SignalProducer<Int, NSError> = SignalProducer {
             sink, disposable in
             var count = 0
-            NSTimer.schedule(repeatInterval: 0.5) { timer in
+            NSTimer.schedule(repeatInterval: 1) { timer in
                 sendNext(sink, count++)
             }
         }
-        let scheduler = PoolScheduler(maxConcurrentActions: 3)
         
         signal
-          |> startOn(scheduler)
-          |> start(next: { id in
-                self.addText("start #\(id)")
-                NSThread.sleepForTimeInterval(3.0)
-                self.addText("stop #\(id)")
-          })
-        
+            |> flatMap(.Merge) {
+                id in
+                return sleepManager.sleep()
+                    |> on(started: { self.addText("task #\(id) started") }, completed: { self.addText("task #\(id) completed") })
+            }
+            |> start(next: addText)
     }
 }
 
