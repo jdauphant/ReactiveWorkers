@@ -41,6 +41,7 @@ public class TaskPool {
                     task.start()
                        |> start( next: { result in
                         sendNext(sink, result)
+                        sendCompleted(sink)
                         self.checkPendingTasks()
                     })
                 } else {
@@ -59,6 +60,7 @@ public class TaskPool {
                     task.start()
                         |> start( next: { result in
                             sendNext(sink, result)
+                            sendCompleted(sink)
                             self.checkPendingTasks()
                         })
                 }

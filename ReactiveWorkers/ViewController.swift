@@ -29,7 +29,40 @@ class ViewController: UIViewController {
             self.textView.text = "\(result)\n\(self.textView.text)"
             })
         
+    }
+    
+    @IBAction func runTests() {
+        self.textView.text = ""
+        testSleepManager()
+    }
+    
+    
+    func addText(text: String) {
+        println("\(NSDate())\(text)")
+        dispatch_async(dispatch_get_main_queue()) {
+            self.textView.text = "\(self.textView.text)\(NSDate())\(text)\n"
+        }
+    }
+
+    
+    func testSleepManager() {
+        let sleepManager = SleepManager()
         
+        let signal: SignalProducer<Int, NSError> = SignalProducer {
+            sink, disposable in
+            var count = 0
+            NSTimer.schedule(repeatInterval: 1) { timer in
+                sendNext(sink, count++)
+            }
+        }
+        
+        signal
+            |> flatMap(.Merge) {
+                id in
+                return sleepManager.sleep()
+                    |> on(started: { self.addText("task #\(id) started") }, completed: { self.addText("task #\(id) completed") })
+            }
+            |> start(next: addText)
     }
 }
 
