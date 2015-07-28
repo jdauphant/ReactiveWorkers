@@ -24,7 +24,7 @@ public class TaskPool {
     private var currentConcurrentTasks  = 0
     private var pendingTasks: [(task: Task, sink: SinkOf<Event<TaskResult, NSError>>, disposable: CompositeDisposable)] = []
     
-    private let dispatchQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_CONCURRENT)
+    private let concurrentQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_CONCURRENT)
     private let serialQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_SERIAL)
  
     init(maxConcurrentTasks: Int = DEFAULT_MAX_CONCURRENT_TASKS) {
@@ -38,12 +38,7 @@ public class TaskPool {
             dispatch_async(self.serialQueue) {
                 if self.currentConcurrentTasks < self.maxConcurrentTasks {
                     self.currentConcurrentTasks++
-                    task.start()
-                       |> start( next: { result in
-                        sendNext(sink, result)
-                        sendCompleted(sink)
-                        self.checkPendingTasks()
-                    })
+                    self.startTask(task, sink:sink, disposable: disposable)
                 } else {
                     self.pendingTasks.append(task: task, sink: sink, disposable: disposable)
                     println("\(NSDate()) totalPendingTasks=\(self.pendingTasks.count)")
@@ -52,18 +47,36 @@ public class TaskPool {
         }
     }
     
+    
+    private func startTask(task: Task, sink: SinkOf<Event<TaskResult, NSError>>, disposable: Disposable) {
+        if disposable.disposed == false {
+            dispatch_async(concurrentQueue) {
+                task.start()
+                    |> start(
+                        next: { result in
+                            sendNext(sink, result)
+                        }, completed: {
+                            sendCompleted(sink)
+                            self.checkPendingTasks()
+                        }, error: { error in
+                            sendError(sink, error)
+                            self.checkPendingTasks()
+                        }, interrupted: {
+                            sendInterrupted(sink)
+                            self.checkPendingTasks()
+                        })
+            }
+        } else {
+            sendInterrupted(sink)
+            self.checkPendingTasks()
+        }
+    }
+    
     private func checkPendingTasks() {
         dispatch_async(serialQueue) {
             if self.pendingTasks.isEmpty == false {
                 let (task,sink,disposable) = self.pendingTasks.removeAtIndex(0)
-                if disposable.disposed == false {
-                    task.start()
-                        |> start( next: { result in
-                            sendNext(sink, result)
-                            sendCompleted(sink)
-                            self.checkPendingTasks()
-                        })
-                }
+                self.startTask(task, sink:sink, disposable: disposable)
             } else {
                 self.currentConcurrentTasks--
             }
