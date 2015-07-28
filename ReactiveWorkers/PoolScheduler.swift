@@ -29,7 +29,7 @@ public class PoolScheduler: SchedulerType {
         dispatch_async(self.serialQueue) {
             if self.currentConcurrentActions < self.maxConcurrentActions {
                 self.currentConcurrentActions++
-                self.startAction(action)
+                self.startAction(action, disposable: disposable)
             } else {
                 self.pendingActions.append(action: action, disposable: disposable)
                 println("\(NSDate()) totalPendingActions=\(self.pendingActions.count)")
@@ -38,9 +38,11 @@ public class PoolScheduler: SchedulerType {
         return disposable
     }
     
-    private func startAction(action: () -> ()) {
+    private func startAction(action: () -> (), disposable: Disposable) {
         dispatch_async(self.concurrentQueue) {
-            action()
+            if disposable.disposed == false {
+                action()
+            }
             self.checkPendingActions()
         }
     }
@@ -49,9 +51,7 @@ public class PoolScheduler: SchedulerType {
         dispatch_async(serialQueue) {
             if self.pendingActions.isEmpty == false {
                 let (action,disposable) = self.pendingActions.removeAtIndex(0)
-                if disposable.disposed == false {
-                    self.startAction(action)
-                }
+                 self.startAction(action, disposable: disposable)
             } else {
                 self.currentConcurrentActions--
             }
