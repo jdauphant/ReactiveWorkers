@@ -38,7 +38,7 @@ class ViewController: UIViewController {
     func addText(text: String) {
         println("\(NSDate())\(text)")
         dispatch_async(dispatch_get_main_queue()) {
-            self.textView.text = "\(self.textView.text)\(NSDate())\(text)\n"
+            self.textView.text = "\(self.textView.text)\(NSDate()) \(text)\n"
         }
     }
     
