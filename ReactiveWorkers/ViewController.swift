@@ -40,7 +40,7 @@ class ViewController: UIViewController {
     func addText(text: String) {
         println("\(NSDate())\(text)")
         dispatch_async(dispatch_get_main_queue()) {
-            self.textView.text = "\(self.textView.text)\(NSDate())\(text)\n"
+            self.textView.text = "\(self.textView.text)\(NSDate()) \(text)\n"
         }
     }
 
@@ -51,16 +51,20 @@ class ViewController: UIViewController {
         let signal: SignalProducer<Int, NSError> = SignalProducer {
             sink, disposable in
             var count = 0
-            NSTimer.schedule(repeatInterval: 1) { timer in
+            NSTimer.schedule(repeatInterval: 0.5) { timer in
                 sendNext(sink, count++)
+                if count >= 12 {
+                    timer.invalidate()
+                    sendCompleted(sink)
+                }
             }
         }
         
         signal
             |> flatMap(.Merge) {
                 id in
-                return sleepManager.sleep()
-                    |> on(started: { self.addText("task #\(id) started") }, completed: { self.addText("task #\(id) completed") })
+                return sleepManager.sleep(timeInterval: 2, id: id)
+                    |> on(started: { self.addText("task #\(id) in queue") }, completed: { self.addText("task #\(id) completed") })
             }
             |> start(next: addText)
     }

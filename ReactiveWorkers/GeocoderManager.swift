@@ -30,6 +30,7 @@ public class GeocoderManager: TaskPool {
                         sendError(sink, error)
                     } else if let location = (placemarks as? [CLPlacemark])?.first?.location {
                         sendNext(sink, GeocoderTaskResult(location: location))
+                        sendCompleted(sink)
                     } else {
                         sendError(sink, NSError(domain: kCLErrorDomain, code: CLError.LocationUnknown.rawValue, userInfo: nil))
                     }
