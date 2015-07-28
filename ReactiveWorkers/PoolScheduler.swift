@@ -9,7 +9,6 @@
 import Foundation
 import ReactiveCocoa
 
-
 public class PoolScheduler: SchedulerType {
     static let DEFAULT_MAX_CONCURRENT_ACTIONS = 3
     
@@ -46,7 +45,7 @@ public class PoolScheduler: SchedulerType {
             self.checkPendingActions()
         }
     }
-        
+    
     private func checkPendingActions() {
         dispatch_async(serialQueue) {
             if self.pendingActions.isEmpty == false {
@@ -57,5 +56,4 @@ public class PoolScheduler: SchedulerType {
             }
         }
     }
-    
 }

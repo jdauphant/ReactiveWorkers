@@ -1,5 +1,6 @@
 PODS:
   - Box (1.2.2)
+  - PriorityQueue (0.2)
   - ReactiveCocoa (3.0-RC.1):
     - Box (~> 1.2.0)
     - ReactiveCocoa/UI (= 3.0-RC.1)
@@ -19,10 +20,21 @@ PODS:
     - Box (~> 1.2)
 
 DEPENDENCIES:
+  - PriorityQueue (from `git@github.com:jdauphant/Swift-PriorityQueue.git`)
   - ReactiveCocoa (= 3.0-RC.1)
+
+EXTERNAL SOURCES:
+  PriorityQueue:
+    :git: git@github.com:jdauphant/Swift-PriorityQueue.git
+
+CHECKOUT OPTIONS:
+  PriorityQueue:
+    :commit: 0606373d68d95959f8bc14f07f7f59a6f9341d3a
+    :git: git@github.com:jdauphant/Swift-PriorityQueue.git
 
 SPEC CHECKSUMS:
   Box: a92e8aa4c099e6bc0733829665caf9e668ef53b8
+  PriorityQueue: db7869a25e6436368e0962ce283b27790c49c6d5
   ReactiveCocoa: c85fe01be4e047dc1d9fba3e1e0b7070846d3296
   Result: b44f6bc8762bbffaf2c5df58f2c7d12c3496ced8
 
