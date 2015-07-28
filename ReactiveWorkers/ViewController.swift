@@ -46,14 +46,14 @@ class ViewController: UIViewController {
 
     
     func testSleepManager() {
-        let sleepManager = SleepManager()
+        let sleepManager = SleepManager(maxConcurrentTasks: 2)
         
         let signal: SignalProducer<Int, NSError> = SignalProducer {
             sink, disposable in
             var count = 0
             NSTimer.schedule(repeatInterval: 0.5) { timer in
                 sendNext(sink, count++)
-                if count >= 12 {
+                if count > 15 {
                     timer.invalidate()
                     sendCompleted(sink)
                 }
@@ -63,8 +63,16 @@ class ViewController: UIViewController {
         signal
             |> flatMap(.Merge) {
                 id in
-                return sleepManager.sleep(timeInterval: 2, id: id)
-                    |> on(started: { self.addText("task #\(id) in queue") }, completed: { self.addText("task #\(id) completed") })
+                let priority: TaskPool.Priority
+                if id%2 == 0 {
+                    priority = .Low
+                } else if id%3 == 0 {
+                    priority = .High
+                } else {
+                    priority = .Medium
+                }
+                return sleepManager.sleep(timeInterval: 2, id: id, priority: priority)
+                    |> on(started: { self.addText("add task #\(id) \(priority)") }, completed: { self.addText("task #\(id) \(priority) completed") })
             }
             |> start(next: addText)
     }

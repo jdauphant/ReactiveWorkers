@@ -8,6 +8,7 @@
 
 import Foundation
 import ReactiveCocoa
+import PriorityQueue
 
 public protocol TaskResult {
     
@@ -20,9 +21,25 @@ public protocol Task {
 public class TaskPool {
     static let DEFAULT_MAX_CONCURRENT_TASKS = 3
     
+    public enum Priority: Int, Printable {
+        case High = 1, Medium, Low
+        public var description: String {
+            switch self {
+                case .Low: return "Low"
+                case .Medium: return "Medium"
+                case .High: return "High"
+            }
+        }
+    }
+    
     let maxConcurrentTasks: Int
     private var currentConcurrentTasks  = 0
-    private var pendingTasks: [(task: Task, sink: SinkOf<Event<TaskResult, NSError>>, disposable: CompositeDisposable)] = []
+    private var pendingTasks = PriorityQueue<(
+            priority: Priority,
+            task: Task,
+            sink: SinkOf<Event<TaskResult, NSError>>,
+            disposable: CompositeDisposable
+        )>( { t1, t2 in t1.priority.rawValue < t2.priority.rawValue } )
     
     private let concurrentQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_CONCURRENT)
     private let serialQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_SERIAL)
@@ -31,7 +48,7 @@ public class TaskPool {
         self.maxConcurrentTasks = maxConcurrentTasks
     }
     
-    func add(task: Task) -> SignalProducer<TaskResult, NSError> {
+    func add(task: Task, priority: Priority) -> SignalProducer<TaskResult, NSError> {
         return SignalProducer {
             sink, disposable in
 
@@ -40,7 +57,7 @@ public class TaskPool {
                     self.currentConcurrentTasks++
                     self.startTask(task, sink:sink, disposable: disposable)
                 } else {
-                    self.pendingTasks.append(task: task, sink: sink, disposable: disposable)
+                    self.pendingTasks.push(priority: priority, task: task, sink: sink, disposable: disposable)
                     println("\(NSDate()) totalPendingTasks=\(self.pendingTasks.count)")
                 }
             }
@@ -74,8 +91,7 @@ public class TaskPool {
     
     private func checkPendingTasks() {
         dispatch_async(serialQueue) {
-            if self.pendingTasks.isEmpty == false {
-                let (task,sink,disposable) = self.pendingTasks.removeAtIndex(0)
+            if let (priority, task,sink,disposable) = self.pendingTasks.pop() {
                 self.startTask(task, sink:sink, disposable: disposable)
             } else {
                 self.currentConcurrentTasks--

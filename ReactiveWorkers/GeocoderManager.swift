@@ -23,7 +23,8 @@ public class GeocoderManager: TaskPool {
             return SignalProducer {
                 sink, disposable in
                 println("Geocode for address : \(self.address)")
-                CLGeocoder().geocodeAddressString(self.address) {
+                let geocoder = CLGeocoder()
+                geocoder.geocodeAddressString(self.address) {
                     placemarks, err in
                     println("Geocode result for \(self.address) : \(placemarks), \(err)")
                     if let error = err {
@@ -39,8 +40,8 @@ public class GeocoderManager: TaskPool {
         }
     }
    
-    public func geocode(address: String) -> SignalProducer<CLLocation, NSError> {
-        return add(GeocoderTask(address: address))
+    public func geocode(address: String, priority: Priority = .Medium) -> SignalProducer<CLLocation, NSError> {
+        return add(GeocoderTask(address: address), priority: priority)
             |> map { result in (result as! GeocoderTaskResult).location }
     }
 }
