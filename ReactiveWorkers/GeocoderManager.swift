@@ -16,16 +16,19 @@ public class GeocoderManager {
     
     public func geocode(address: String) -> SignalProducer<CLLocation, NSError> {
         return SignalProducer { sink, disposable in
+            let semaphore = dispatch_semaphore_create(0)
             CLGeocoder().geocodeAddressString(address) { placemarks, err in
                 if let error = err {
                     sendError(sink, error)
                 } else if let location = (placemarks as? [CLPlacemark])?.first?.location {
                     sendNext(sink, location)
+                    sendCompleted(sink)
                 } else {
                     sendError(sink, NSError(domain: kCLErrorDomain, code: CLError.LocationUnknown.rawValue, userInfo: nil))
                 }
-                
+                dispatch_semaphore_signal(semaphore)
             }
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
         } |> startOn(scheduler)
     }
 }
